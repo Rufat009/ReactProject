@@ -1,7 +1,5 @@
 import { useDispatch } from "react-redux";
 import { addTask } from "../reducer/slicer";
-import { too } from "../reducer/slicer";
-
 function AddTaskForm() {
     const dispatch = useDispatch();
 

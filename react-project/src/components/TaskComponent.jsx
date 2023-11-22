@@ -1,6 +1,5 @@
-import { deleteTask } from "../reducer/slicer";
-import store from "../reducer/store";
-import {useLoaderData,Form, useRouteLoaderData } from "react-router-dom";
+import store from './reducer/store';
+import {Form, useRouteLoaderData } from "react-router-dom";
 
 export async function loader({params}){
   const tasks = store.getState();

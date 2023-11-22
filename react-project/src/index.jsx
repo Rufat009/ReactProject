@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import store from './reducer/store';
+import store from './components/reducer/store'
 import { Provider } from 'react-redux';
 import {
   createBrowserRouter,
@@ -14,7 +14,7 @@ import Root,{
   loader as rootLoader,
   action as rootAction
 }
-from './root';
+from './root'
 
 import Edit,{
   action as editAction,
@@ -26,7 +26,6 @@ import Task,{
 
 import { action as taskDestroy } from './components/Forms/DeleteTask';
 import ErrorPage from './components/Forms/ErrorPage';
-import { Children } from 'react';
 
 const router = createBrowserRouter([
   {
