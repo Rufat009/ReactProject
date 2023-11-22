@@ -1,4 +1,4 @@
-import { Form, useLoaderData,redirect } from "react-router-dom";
+import { Form, useLoaderData,redirect, useNavigate } from "react-router-dom";
 import store from "../reducer/store";   
 import { updateTask } from '../reducer/slicer'
 
@@ -18,7 +18,11 @@ export async function action({ request, params }) {
 }
 
 export default function Edit() {
+  const navigator = useNavigate();
   const { element } = useLoaderData();
+  const handle = () => {
+    navigator("/")
+  }
   return (
     <Form method="put" id="taks-form">
       <p>
@@ -44,12 +48,12 @@ export default function Edit() {
         <input
             type="checkbox"
             name="isdone"            
-            defaultChecked={element.isDone === "false"}
+            defaultChecked={element.isDone}
         />
       </label>
       <p>
         <button type="submit">Save</button>
-        <button type="button">Cancel</button>
+        <button type="button" onClick={handle}>Cancel</button>
       </p>
     </Form>
   );

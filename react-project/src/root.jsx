@@ -1,8 +1,10 @@
-import { Outlet, useLoaderData,Form } from "react-router-dom";
+import { Outlet, useLoaderData,Form ,redirect, Navigate} from "react-router-dom";
 import { useSelector,useDispatch} from 'react-redux';
 import store from "./components/reducer/store";
 import { Link } from "react-router-dom";
 import { addTask,deleteTask,updateTask } from "./components/reducer/slicer";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export async function loader(){
   const tasks = store.getState();
@@ -28,7 +30,23 @@ export default function Root() {
         isDone: isDone,
       }))
     }
+
+
+    const handleFilterChange = (e) => {
+      setFilter(e.target.value);
+    }
+
+    const navigate = useNavigate();
+    
     const {tasks} = useLoaderData();
+
+    const [filter, setFilter] = useState('all');
+
+    const filteredTasks = tasks.filter((task) => {
+      if (filter === 'all') return true;
+      if (filter === 'non_completed') return task.isDone === false;
+      if (filter === 'completed') return task.isDone === true;
+    });
     return (
       <>
       
@@ -48,11 +66,19 @@ export default function Root() {
             <Form method="post">
               <button type="submit">New</button>
             </Form>
+            <label>
+            <span>Filter:</span>
+            <select id="filter"  onChange={handleFilterChange}>
+              <option value="all">All</option>
+              <option value="non_completed">Non Completed</option>
+              <option value="completed">Completed</option>
+            </select>
+          </label>
           </div>   
           <nav>
           {tasks.length ? (
             <ul>
-              {tasks.map((task) => (
+              {filteredTasks.map((task) => (
                 <li key={task.id}>
                   <Link to={`tasks/${task.id}`}>                   
                       <>
@@ -66,7 +92,7 @@ export default function Root() {
           </Link>
           </Form>
            
-          <Form
+          <form
             method="delete"
             onSubmit={(event) => {
               if (
@@ -75,13 +101,16 @@ export default function Root() {
                 )
               ) {
                 event.preventDefault();
-              }else{
-                  store.dispatch(deleteTask(task.id));
+              }
+              else{
+                  const index = tasks.findIndex(e => e.id === task.id);
+                  store.dispatch(deleteTask(index));
+                  navigate("/")
               }
             }}
           >        
             <button type="submit">Delete</button>                 
-          </Form>
+          </form>
         
           <label>
           
