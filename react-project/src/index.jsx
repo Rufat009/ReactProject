@@ -9,6 +9,7 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+
 import Root,{
   loader as rootLoader,
   action as rootAction
@@ -17,13 +18,14 @@ from './root';
 
 import Edit,{
   action as editAction,
-} from './components/edit';
+} from './components/Forms/Edit';
 
 import Task,{
   loader as taskLoader,
-} from './components/Task';
-import { action as taskDestroy } from './components/destroy';
-import ErrorPage from './components/error-page';
+} from './components/TaskComponent';
+
+import { action as taskDestroy } from './components/Forms/DeleteTask';
+import ErrorPage from './components/Forms/ErrorPage';
 import { Children } from 'react';
 
 const router = createBrowserRouter([
