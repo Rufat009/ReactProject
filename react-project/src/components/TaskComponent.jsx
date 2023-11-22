@@ -1,34 +1,57 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { deleteTask, completeTask } from 'your-action-file-path'; // Update with your actual action file path
-import { NavLink } from 'react-router-dom';
+import { deleteTask } from "../reducer/slicer";
+import store from "../reducer/store";
+import {useLoaderData,Form, useRouteLoaderData } from "react-router-dom";
 
-const TaskComponent = ({ task }) => {
-   
+export async function loader({params}){
+  const tasks = store.getState();
+  const element = tasks.tasks.find(e => e.id === params.taskid);
+  console.log(element);
+  return {element};
+}
+
+
+
+function Task() {
+    const {element} = useRouteLoaderData("taskinfo");  
     return (
-        <>
-            <CheckBox task={task} />
-            <NavLink to={`tasks/${task.id}`}>
-                {task.title ? <>{task.title}</> : <i>No Title</i>}
-            </NavLink>
-            <button onClick={handleDeleteClick}>Delete</button>
-        </>
-    );
-};
 
-const CheckBox = ({ task }) => {
-    const dispatch = useDispatch();
-    const isCompleted = task.completed;
+        <div id="task">
+        <div>
+        <h1>
+            {element.name}
+        </h1>
+        <p>         
+            {element.content}
+        </p>        
+        <p>         
+            {element.isDone ? "complited" : "not complited"}
+        </p>
+        <p>         
+            {element.id}
+        </p>
+        <div>
+          <Form action="edit">
+            <button type="submit">Edit</button>
+          </Form>
+          <Form
+            method="delete"
+            action="destroy"
+            onSubmit={(event) => {
+              if (
+                !window.confirm(
+                  "Please confirm you want to delete this record."
+                )
+              ) {
+                event.preventDefault();
+              }
+            }}
+          >
+            <button type="submit">Delete</button>
+          </Form>
+        </div>
+      </div>
+      </div>
+    )
+}
 
-    const handleClick = () => {
-        dispatch(completeTask({ id: task.id }));
-    };
-
-    return (
-        <button onClick={handleClick}>
-            {isCompleted ? "Completed" : "Incomplete"}
-        </button>
-    );
-};
-
-export default TaskComponent;
+export default Task;
